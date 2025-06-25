@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podium | Strategic Talent Analysis: Utah vs. Remote</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 640px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .kpi-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .kpi-value {
+            font-weight: 900;
+            line-height: 1;
+        }
+        .kpi-label {
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+        .section-title {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .section-subtitle {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+            text-align: center;
+            max-width: 48rem;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 3rem;
+            color: #4a5568;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .accordion-header {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+        }
+        .accordion-content.open {
+            transition: max-height 1s ease-in-out;
+            max-height: 1000px;
+        }
+        .accordion-icon:after {
+            content: '+';
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: #9ca3af;
+        }
+        .accordion-header.active .accordion-icon:after {
+            content: '−';
+        }
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0.25rem;
+            width: 1px;
+            height: 100%;
+            background-color: #cbd5e1;
+        }
+        .timeline-item:last-child:before {
+            display: none;
+        }
+        .timeline-marker {
+            position: absolute;
+            left: 0;
+            top: 0.25rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+        }
+        .flowchart-node {
+            border: 2px solid;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .flowchart-arrow {
+            position: relative;
+            width: 2rem;
+            height: 2px;
+            align-self: center;
+        }
+        .flowchart-arrow:after {
+            content: '►';
+            position: absolute;
+            right: -0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
+        .rating-bar-bg {
+            background-color: #e2e8f0;
+            border-radius: 9999px;
+            height: 0.75rem;
+            overflow: hidden;
+        }
+        .rating-bar {
+            height: 100%;
+            border-radius: 9999px;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 1rem;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 48rem;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-2xl font-bold" style="color: #003f5c;">Podium Talent Strategy</h1>
+            <div class="hidden md:flex space-x-6 text-sm font-semibold">
+                <a href="#utah" class="hover:text-blue-600 transition">Silicon Slopes</a>
+                <a href="#talent-comparison" class="hover:text-blue-600 transition">Engineer Profiles</a>
+                <a href="#ai" class="hover:text-blue-600 transition">AI Talent</a>
+                <a href="#recommendation" class="hover:text-blue-600 transition">Recommendation</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="hero" class="text-center py-16">
+            <h1 class="text-4xl md:text-6xl font-black uppercase" style="color: #003f5c;">The Utah Talent <span style="color: #665191;">Paradox</span></h1>
+            <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-gray-600">Podium faces a critical strategic choice: navigate the hyper-competitive local market of Silicon Slopes, or tap into the vast and specialized national remote talent pool.</p>
+        </section>
+
+        <section id="utah" class="py-16">
+            <h2 class="section-title" style="color: #003f5c;">Decoding Silicon Slopes: A Land of Growth & Contradiction</h2>
+            <p class="section-subtitle">Utah's tech sector is booming, creating a vibrant ecosystem. However, this explosive growth also fuels intense, unsustainable competition for a limited talent pool, creating a significant strategic challenge for Podium.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <div class="kpi-card" style="border-top: 5px solid #ffa600;">
+                    <p class="text-6xl kpi-value" style="color: #ffa600;">#1</p>
+                    <p class="kpi-label text-gray-600">in Projected Tech Job Growth in the U.S. (2024-2034)</p>
+                </div>
+                <div class="kpi-card" style="border-top: 5px solid #ff7c43;">
+                    <p class="text-6xl kpi-value" style="color: #ff7c43;">+33%</p>
+                    <p class="kpi-label text-gray-600">Forecasted Tech Occupation Growth Over the Next Decade</p>
+                </div>
+                <div class="kpi-card" style="border-top: 5px solid #f95d6a;">
+                    <p class="text-6xl kpi-value" style="color: #f95d6a;">2.03</p>
+                    <p class="kpi-label text-gray-600">Developer Concentration (LQ) in Provo-Orem vs. National Average</p>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="text-xl font-bold text-center mb-2" style="color: #2f4b7c;">Tech Job Concentration: Utah vs. U.S. Average</h3>
+                <p class="text-center text-gray-600 mb-6">Utah's specialization in tech is undeniable, particularly for software developers in the Provo-Orem area. This creates a deep but fiercely contested local talent pool.</p>
+                <div class="chart-container">
+                    <canvas id="concentrationChart"></canvas>
+                </div>
+                <div class="text-center mt-4">
+                    <button class="modal-open-btn bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold" data-target="concentrationDetails">Show Details</button>
+                </div>
+            </div>
+        </section>
+        
+        <section id="talent-comparison" class="py-16 bg-gray-50 rounded-xl">
+            <h2 class="section-title" style="color: #003f5c;">A Tale of Two Engineers</h2>
+            <p class="section-subtitle">Podium needs both generalist and specialist talent. The optimal sourcing strategy is different for each, demonstrating the need for a hybrid approach.</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="card flex flex-col h-full">
+                    <div class="accordion-header">
+                        <h3 class="text-2xl font-bold" style="color: #2f4b7c;">The Senior Full-Stack Engineer</h3>
+                        <div class="accordion-icon"></div>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="pt-4 space-y-4 flex-grow">
+                            <p class="text-gray-600">This role requires strong, well-rounded experience in building and maintaining product features across the entire tech stack.</p>
+                            <div>
+                                <h4 class="font-semibold mb-2">Key Skills:</h4>
+                                <div class="flex flex-wrap gap-2 text-sm">
+                                    <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">TypeScript</span>
+                                    <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">Python/Go</span>
+                                    <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">SQL/NoSQL</span>
+                                    <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">Cloud (AWS/GCP)</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Utah Talent Pool Strength:</h4>
+                                <div class="rating-bar-bg"><div class="rating-bar w-3/4" style="background-color: #ff7c43;"></div></div>
+                                <p class="text-xs text-gray-500 mt-1">Strong local concentration, but high competition.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Top Sourcing Channels:</h4>
+                                <p class="text-gray-600">BYU/UofU Alumni Networks, UtahJS Meetups, Employee Referrals.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-gray-200 text-center">
+                        <p class="text-lg font-bold" style="color: #2f4b7c;">Verdict: <span class="text-green-600">Local Hiring is Highly Viable</span></p>
+                    </div>
+                </div>
+
+                <div class="card flex flex-col h-full">
+                    <div class="accordion-header">
+                        <h3 class="text-2xl font-bold" style="color: #665191;">The Senior AI/ML Engineer</h3>
+                        <div class="accordion-icon"></div>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="pt-4 space-y-4 flex-grow">
+                            <p class="text-gray-600">This role demands deep, specialized expertise in building and deploying production-grade artificial intelligence systems.</p>
+                            <div>
+                                <h4 class="font-semibold mb-2">Key Skills:</h4>
+                                <div class="flex flex-wrap gap-2 text-sm">
+                                    <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full">LLM/RAG Engineering</span>
+                                    <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full">Vector Databases</span>
+                                    <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full">PyTorch/TensorFlow</span>
+                                    <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full">AI Deployment</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Talent Pool Strength:</h4>
+                                <p class="text-xs text-gray-500 mb-1">Utah Pool (Emerging)</p>
+                                <div class="rating-bar-bg mb-2"><div class="rating-bar w-1/4" style="background-color: #d45087;"></div></div>
+                                <p class="text-xs text-gray-500 mb-1">National Remote Pool (Deep)</p>
+                                <div class="rating-bar-bg"><div class="rating-bar w-11/12" style="background-color: #a05195;"></div></div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Top Sourcing Channels:</h4>
+                                <p class="text-gray-600">Ex-FAANG Layoff Pools, AI Research Communities, Niche Job Boards.</p>
+                            </div>
+                        </div>
+                     </div>
+                    <div class="mt-6 pt-4 border-t border-gray-200 text-center">
+                         <p class="text-lg font-bold" style="color: #665191;">Verdict: <span class="text-purple-700">Remote-First Hiring Recommended</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="remote" class="py-16">
+            <h2 class="section-title" style="color: #003f5c;">The National Remote Market: A New Frontier</h2>
+            <p class="section-subtitle">The confluence of permanent remote work shifts and historic tech layoffs has created a buyer's market for the exact senior, specialized talent Podium needs to fuel its next phase of growth.</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="card">
+                    <h3 class="text-xl font-bold text-center mb-2" style="color: #665191;">The Layoff-Fueled Talent Surge</h3>
+                    <p class="text-center text-gray-600 mb-6">Over a quarter-million tech employees were laid off in 2023, releasing a wave of experienced senior engineers from top-tier companies into the market.</p>
+                    <div class="chart-container">
+                        <canvas id="layoffChart"></canvas>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="modal-open-btn bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-semibold" data-target="layoffDetails">Show Details</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-bold text-center mb-2" style="color: #665191;">Remote Work is the New Standard</h3>
+                    <p class="text-center text-gray-600 mb-6">The percentage of professionals working fully remotely has quintupled since the pandemic, making it a baseline expectation for senior talent.</p>
+                    <div class="chart-container">
+                        <canvas id="remoteWorkChart"></canvas>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="modal-open-btn bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-semibold" data-target="remoteWorkDetails">Show Details</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="ai" class="py-16 bg-gray-50 rounded-xl">
+            <h2 class="section-title" style="color: #003f5c;">The AI Talent Gold Rush</h2>
+            <p class="section-subtitle">For the specialized AI skills Podium needs now, the national remote pool is definitively superior. It offers access to engineers with proven experience shipping production-level AI systems at scale.</p>
+            <div class="card">
+                 <h3 class="text-xl font-bold text-center mb-2" style="color: #a05195;">AI/ML Skill Depth: Utah vs. National Remote</h3>
+                 <p class="text-center text-gray-600 mb-6">While Utah's AI scene is emerging, the national talent pool, rich with ex-FAANG engineers, offers far greater depth in critical areas like LLM/RAG engineering and deploying models to production.</p>
+                <div class="chart-container">
+                    <canvas id="aiSkillsChart"></canvas>
+                </div>
+                 <div class="text-center mt-4">
+                    <button class="modal-open-btn bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-semibold" data-target="aiSkillsDetails">Show Details</button>
+                </div>
+            </div>
+        </section>
+        
+        <section id="recommendation" class="py-16">
+            <h2 class="section-title" style="color: #003f5c;">The Strategic Verdict: A Structured Hybrid Model</h2>
+            <p class="section-subtitle">The optimal path forward is not an "either/or" choice. Podium should adopt a deliberate hybrid strategy that leverages the best of both worlds: maintaining a strong local hub while embracing remote-first hiring for specialized, high-impact roles.</p>
+            <div class="card">
+                 <h3 class="text-xl font-bold text-center mb-4" style="color: #2f4b7c;">How the Structured Hybrid Model Works</h3>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0">
+                    <div class="flowchart-node w-full md:w-1/4" style="border-color: #ffa600; color: #ffa600;">
+                        <span class="font-bold text-lg">Lehi HQ</span>
+                        <span class="text-sm text-gray-600">Cultural & Collaboration Hub</span>
+                    </div>
+                    <div class="flowchart-arrow" style="background-color: #d45087; color: #d45087;"></div>
+                    <div class="flowchart-node w-full md:w-1/4" style="border-color: #d45087; color: #d45087;">
+                        <span class="font-bold text-lg">Targeted Hiring</span>
+                        <span class="text-sm text-gray-600">Dual-Market Sourcing</span>
+                    </div>
+                    <div class="flowchart-arrow hidden md:block" style="background-color: #665191; color: #665191;"></div>
+                    <div class="flowchart-node w-full md:w-1/2 mt-4 md:mt-0 p-4" style="border-color: #665191; color: #665191;">
+                        <div class="flex divide-x divide-gray-300 w-full">
+                            <div class="w-1/2 pr-2 text-center">
+                                <span class="font-bold text-lg">Local Talent</span>
+                                <span class="text-sm text-gray-600 block">Generalist & Early-Career Pipeline</span>
+                            </div>
+                            <div class="w-1/2 pl-2 text-center">
+                                <span class="font-bold text-lg">Remote Talent</span>
+                                <span class="text-sm text-gray-600 block">Senior AI/ML Specialists</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="py-16 bg-gray-50 rounded-xl">
+             <h2 class="section-title" style="color: #003f5c;">18-Month Implementation Roadmap</h2>
+             <p class="section-subtitle">Transitioning to a Structured Hybrid model requires a deliberate, phased approach to build the right foundation, test the strategy, and scale for long-term success.</p>
+             <div class="card space-y-4">
+                <div class="timeline-item-wrapper">
+                    <div class="relative pl-10 accordion-header">
+                        <div class="timeline-marker" style="background-color: #ffa600;">1</div>
+                        <h3 class="text-lg font-bold" style="color: #2f4b7c;">Phase 1 (Q1-2): Foundation & Policy</h3>
+                        <div class="accordion-icon mr-4"></div>
+                    </div>
+                    <div class="accordion-content pl-10">
+                        <p class="text-gray-600 pt-2">Formalize the hybrid policy, invest in a remote-first tool stack, and restructure the Talent Acquisition team for dual-market sourcing.</p>
+                    </div>
+                </div>
+                <div class="timeline-item-wrapper">
+                    <div class="relative pl-10 accordion-header">
+                         <div class="timeline-marker" style="background-color: #f95d6a;">2</div>
+                        <h3 class="text-lg font-bold" style="color: #2f4b7c;">Phase 2 (Q3-4): Pilot Programs & Sourcing</h3>
+                         <div class="accordion-icon mr-4"></div>
+                    </div>
+                     <div class="accordion-content pl-10">
+                        <p class="text-gray-600 pt-2">Launch targeted remote searches for senior AI engineers and forge national sourcing partnerships.</p>
+                    </div>
+                </div>
+                 <div class="timeline-item-wrapper">
+                    <div class="relative pl-10 accordion-header">
+                         <div class="timeline-marker" style="background-color: #a05195;">3</div>
+                        <h3 class="text-lg font-bold" style="color: #2f4b7c;">Phase 3 (Year 2+): Scale & Optimize</h3>
+                         <div class="accordion-icon mr-4"></div>
+                    </div>
+                    <div class="accordion-content pl-10">
+                        <p class="text-gray-600 pt-2">Analyze retention and engagement data, evolve company rituals to be remote-inclusive, and ensure equitable career growth paths for all employees, regardless of location.</p>
+                    </div>
+                </div>
+             </div>
+        </section>
+
+    </main>
+    
+    <div id="infoModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modalTitle" class="text-2xl font-bold" style="color: #003f5c;">Details</h3>
+                <button id="modalCloseBtn" class="text-3xl font-light text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div id="modalBody" class="text-gray-700 space-y-4">
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white mt-16">
+        <div class="container mx-auto px-6 py-4 text-center text-gray-500">
+             <p>&copy; 2025 Podium. Strategic Talent Analysis. All data synthesized from internal research report.</p>
+        </div>
+    </footer>
+
+    <script>
+        const brilliantBlues = {
+            blueDark: '#003f5c',
+            blueMid: '#2f4b7c',
+            purpleDark: '#665191',
+            purpleMid: '#a05195',
+            magenta: '#d45087',
+            red: '#f95d6a',
+            orange: '#ff7c43',
+            yellow: '#ffa600'
+        };
+
+        const globalChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#4a5568',
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                              return label.join(' ');
+                            } else {
+                              return label;
+                            }
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { color: '#4a5568' },
+                    grid: { color: '#e2e8f0' }
+                },
+                x: {
+                    ticks: { color: '#4a5568' },
+                    grid: { display: false }
+                }
+            }
+        };
+        
+        const wrapLabel = (label, maxLength = 16) => {
+            if (label.length <= maxLength) return label;
+            const words = label.split(' ');
+            let currentLine = '';
+            const lines = [];
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).trim().length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            });
+            lines.push(currentLine.trim());
+            return lines;
+        };
+
+        new Chart(document.getElementById('concentrationChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Overall Tech Sector', wrapLabel('Software Developers (Statewide)'), wrapLabel('Software Developers (Provo-Orem)')],
+                datasets: [{
+                    label: 'Location Quotient (LQ) vs. National Average',
+                    data: [1.34, 1.42, 2.03],
+                    backgroundColor: [brilliantBlues.yellow, brilliantBlues.orange, brilliantBlues.red],
+                    borderColor: '#ffffff',
+                    borderWidth: 2
+                }]
+            },
+            options: { ...globalChartOptions }
+        });
+
+        new Chart(document.getElementById('layoffChart'), {
+            type: 'line',
+            data: {
+                labels: ['Early 2023', 'Mid 2023', 'Late 2023', 'Early 2024'],
+                datasets: [{
+                    label: 'Tech Layoffs (Cumulative Thousands)',
+                    data: [80, 190, 262, 369],
+                    borderColor: brilliantBlues.magenta,
+                    backgroundColor: 'rgba(212, 80, 135, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { ...globalChartOptions, plugins: {...globalChartOptions.plugins, legend: { display: false } } }
+        });
+        
+        new Chart(document.getElementById('remoteWorkChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Fully Remote', 'Hybrid / In-Office'],
+                datasets: [{
+                    data: [35, 65],
+                    backgroundColor: [brilliantBlues.purpleDark, '#e2e8f0'],
+                    borderColor: '#ffffff',
+                    borderWidth: 4
+                }]
+            },
+            options: { ...globalChartOptions, scales: { y: { display: false }, x: { display: false } } }
+        });
+        
+        new Chart(document.getElementById('aiSkillsChart'), {
+            type: 'radar',
+            data: {
+                labels: ['AI/ML Deployment', wrapLabel('Vector DB & Pipelines'), 'LLM/RAG Engineering', 'Senior AI Leadership', 'Cloud Architecture'],
+                datasets: [
+                    {
+                        label: 'Utah Talent Pool',
+                        data: [4, 3, 3, 2, 6],
+                        backgroundColor: 'rgba(160, 81, 149, 0.4)',
+                        borderColor: brilliantBlues.purpleMid,
+                        pointBackgroundColor: brilliantBlues.purpleMid,
+                        pointBorderColor: '#fff',
+                    },
+                    {
+                        label: 'National Remote Pool',
+                        data: [8, 7, 9, 8, 9],
+                        backgroundColor: 'rgba(47, 75, 124, 0.4)',
+                        borderColor: brilliantBlues.blueMid,
+                        pointBackgroundColor: brilliantBlues.blueMid,
+                        pointBorderColor: '#fff',
+                    }
+                ]
+            },
+            options: { ...globalChartOptions, 
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 10,
+                        ticks: {
+                            color: '#4a5568',
+                            backdropColor: 'transparent',
+                            stepSize: 2
+                        },
+                        pointLabels: {
+                            font: { size: 12 },
+                            color: '#1a202c'
+                        },
+                        grid: { color: '#e2e8f0' }
+                    }
+                }
+            }
+        });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const accordions = document.querySelectorAll('.accordion-header');
+            accordions.forEach(accordion => {
+                accordion.addEventListener('click', () => {
+                    accordion.classList.toggle('active');
+                    const content = accordion.nextElementSibling;
+                    if (content.classList.contains('accordion-content')) {
+                       content.classList.toggle('open');
+                    } else { 
+                       const contentWrapper = accordion.parentElement.querySelector('.accordion-content');
+                       if(contentWrapper) contentWrapper.classList.toggle('open');
+                    }
+                });
+            });
+
+            const modalDetails = {
+                concentrationDetails: {
+                    title: 'Utah Talent Concentration',
+                    text: `Utah's location quotient (LQ) for the tech sector is 1.34, meaning it has a 34% higher concentration of tech jobs than the U.S. average. This is even more pronounced for software developers, where the LQ is 1.42 statewide and a remarkable 2.03 in the Provo-Orem area. This confirms a deep local talent pool but also signifies the intense competition created by this density.`
+                },
+                layoffDetails: {
+                    title: 'The Layoff-Fueled Talent Surge',
+                    text: `The period from 2023-2024 saw over 369,000 tech employees laid off from major firms like Amazon, Microsoft, and Meta. These were not just junior roles; many were experienced, senior engineers working on advanced products. This event released a wave of elite, specialized talent into the market, creating a temporary buyer's market for companies like Podium seeking high-value skills.`
+                },
+                remoteWorkDetails: {
+                    title: 'Remote Work: The New Standard',
+                    text: `The pandemic permanently shifted workplace norms. As of 2024, 35% of U.S. employees whose jobs can be done from home are fully remote, a five-fold increase from pre-pandemic levels. For senior tech talent, the option for remote or hybrid work is no longer a perk but a baseline expectation, and companies without flexible policies are at a significant competitive disadvantage.`
+                },
+                aiSkillsDetails: {
+                    title: 'AI/ML Skill Depth Comparison',
+                    text: `This chart visualizes the talent gap for specialized AI skills. While Utah's talent pool (purple line) is strong in foundational areas like Cloud Architecture, it is still emerging in cutting-edge AI fields. The national remote pool (blue line), enriched by ex-FAANG talent, shows significantly greater depth in AI/ML Deployment, Vector DBs, and especially LLM/RAG Engineering. This makes a national search essential for securing top-tier AI specialists.`
+                }
+            };
+
+            const modal = document.getElementById('infoModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            const openButtons = document.querySelectorAll('.modal-open-btn');
+            const closeButton = document.getElementById('modalCloseBtn');
+
+            const openModal = (targetId) => {
+                const details = modalDetails[targetId];
+                if(details) {
+                    modalTitle.innerText = details.title;
+                    modalBody.innerText = details.text;
+                    modal.classList.remove('hidden');
+                }
+            };
+
+            const closeModal = () => {
+                modal.classList.add('hidden');
+            };
+
+            openButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    openModal(button.dataset.target);
+                });
+            });
+
+            closeButton.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
