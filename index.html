@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podium Talent Analysis: Utah vs. U.S. Remote</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 450px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .kpi-card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .kpi-value {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1;
+            color: #ef5675;
+        }
+        .kpi-label {
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            color: #003f5c;
+        }
+        .flowchart-step {
+            border: 2px solid #7a5195;
+            background-color: #ffffff;
+            color: #003f5c;
+            transition: all 0.3s ease;
+        }
+        .flowchart-step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .flowchart-arrow {
+            color: #7a5195;
+        }
+    </style>
+</head>
+<body class="text-[#003f5c]">
+
+    <header class="bg-[#003f5c] text-white text-center py-16 px-4">
+        <h1 class="text-4xl md:text-5xl font-black uppercase tracking-wide">The Hunt for Elite Engineers</h1>
+        <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-gray-300">A Data-Driven Comparison: Utah vs. U.S. Remote Talent for Podium</p>
+    </header>
+
+    <main class="container mx-auto px-4 py-12">
+
+        <section id="kpis" class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div class="kpi-card">
+                <div class="kpi-value">15-25%</div>
+                <p class="kpi-label">Potential Salary Savings in Utah</p>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-value">8,000+</div>
+                <p class="kpi-label">Estimated Senior Engineers in Utah</p>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-value">1.7M+</div>
+                <p class="kpi-label">Total Software Developers in the U.S.</p>
+            </div>
+        </section>
+
+        <section id="utah-deep-dive" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4">The Silicon Slopes Advantage</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-600">Utah offers a concentrated, cost-effective, and culturally aligned talent pool with deep SaaS experience. The ecosystem is dense, interconnected, and fueled by major tech anchors and strong universities.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-2 text-center">Utah Tech Talent Concentration</h3>
+                    <p class="text-center text-sm text-gray-500 mb-4">The majority of Utah's tech jobs are concentrated in the Salt Lake and Provo-Orem metro areas.</p>
+                    <div class="chart-container h-64 md:h-80">
+                        <canvas id="talentConcentrationChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-2 text-center">Local Tech Stack Alignment</h3>
+                     <p class="text-center text-sm text-gray-500 mb-4">Utah's talent pool shows strong alignment with Podium's core technologies, including a surprisingly vibrant Elixir community.</p>
+                    <div class="chart-container h-64 md:h-80">
+                        <canvas id="techStackAlignmentChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-2">
+                    <h3 class="text-xl font-bold mb-2 text-center">Local Hiring Competition</h3>
+                    <p class="text-center text-sm text-gray-500 mb-6">Competition is fierce but predictable, focused on a known set of "Silicon Slopes" leaders.</p>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 text-center">
+                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Adobe</div>
+                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Qualtrics</div>
+                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Microsoft</div>
+                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Domo</div>
+                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Instructure</div>
+                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">MX</div>
+                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Ancestry</div>
+                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Pluralsight</div>
+                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Ivanti</div>
+                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Venafi</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="remote-deep-dive" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4">The National Talent Ocean</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-600">The U.S. remote market provides unparalleled access to a vast, diverse, and senior-heavy talent pool, especially for niche skills like Elixir and advanced AI/ML, but at a premium cost.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-2 text-center">Seniority Bias in Remote Roles</h3>
+                    <p class="text-center text-sm text-gray-500 mb-4">Senior-level jobs are significantly more likely to be offered as remote positions, creating a talent pool rich in experience.</p>
+                    <div class="chart-container h-64 md:h-80">
+                        <canvas id="seniorityBiasChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-2 text-center">Access to Niche Expertise</h3>
+                    <p class="text-center text-sm text-gray-500 mb-4">The national pool offers orders of magnitude more depth for highly specialized Elixir and AI/ML talent.</p>
+                    <div class="chart-container h-64 md:h-80">
+                        <canvas id="nicheTalentChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-2">
+                    <h3 class="text-xl font-bold mb-2 text-center">Remote Market Dynamics</h3>
+                    <p class="text-center text-sm text-gray-500 mb-6">Two major forces are currently shaping remote candidate availability, creating unique sourcing opportunities.</p>
+                    <div class="flex flex-col md:flex-row justify-around gap-8">
+                        <div class="text-center flex-1">
+                            <div class="text-6xl mb-2">📈</div>
+                            <h4 class="text-lg font-bold">Increased Supply from Layoffs</h4>
+                            <p class="text-gray-600">Widespread tech layoffs have released high-quality, experienced engineers into the job market.</p>
+                        </div>
+                        <div class="text-center flex-1">
+                            <div class="text-6xl mb-2">🏃💨</div>
+                            <h4 class="text-lg font-bold">"Forced Churn" from RTO</h4>
+                            <p class="text-gray-600">Engineers leaving companies due to strict Return-To-Office mandates create a pool of proven, remote-ready talent.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="head-to-head" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4">Head-to-Head Comparison</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-600">The most critical decision factor comes down to a trade-off between cost and access to talent. Utah offers significant savings, while remote provides access to a higher ceiling of expertise.</p>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-bold mb-2 text-center">Senior Engineer Salary Benchmarks (Average Base)</h3>
+                <p class="text-center text-sm text-gray-500 mb-4">Utah's compensation is competitive locally but offers a clear cost advantage over major remote hubs and the national remote average.</p>
+                <div class="chart-container h-96 md:h-[500px]">
+                    <canvas id="salaryBenchmarkChart"></canvas>
+                </div>
+            </div>
+        </section>
+        
+        <section id="pipeline" class="mb-20">
+             <h2 class="text-3xl font-bold text-center mb-4">The Utah Talent Pipeline</h2>
+             <p class="text-center max-w-3xl mx-auto mb-12 text-gray-600">Utah's tech ecosystem is consistently replenished by a strong network of universities and alternative training programs, creating a sustainable talent pipeline.</p>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-bold mb-2 text-center">Top Utah Universities by Annual CS Graduates</h3>
+                 <p class="text-center text-sm text-gray-500 mb-6">A mix of traditional and online institutions produce a high volume of tech graduates each year, fueling the local industry.</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 border-b-2 border-gray-200">
+                            <tr>
+                                <th class="p-3 text-sm font-semibold tracking-wide">Institution</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide">Key Strengths</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-right">Annual Grads</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="bg-white">
+                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap font-bold text-[#ef5675]">Western Governors University</td>
+                                <td class="p-3 text-sm text-gray-700">Online, competency-based, high volume</td>
+                                <td class="p-3 text-sm text-gray-700 font-bold text-right">1,317</td>
+                            </tr>
+                             <tr class="bg-gray-50">
+                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap font-bold text-[#bc5090]">Utah Valley University</td>
+                                <td class="p-3 text-sm text-gray-700">Hands-on, applied learning, ABET-accredited</td>
+                                <td class="p-3 text-sm text-gray-700 font-bold text-right">1,249</td>
+                            </tr>
+                            <tr class="bg-white">
+                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap font-bold text-[#7a5195]">University of Utah</td>
+                                <td class="p-3 text-sm text-gray-700">Historic CS program, strong research, elite placements</td>
+                                <td class="p-3 text-sm text-gray-700 font-bold text-right">399</td>
+                            </tr>
+                             <tr class="bg-gray-50">
+                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap font-bold text-[#374c80]">Brigham Young University</td>
+                                <td class="p-3 text-sm text-gray-700">Robust programs, heavily recruited by top tech</td>
+                                <td class="p-3 text-sm text-gray-700 font-bold text-right">N/A</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="recommendations">
+            <h2 class="text-3xl font-bold text-center mb-4">Podium's Path Forward: A Bifurcated Sourcing Strategy</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-600">The optimal strategy is a two-pronged approach that leverages the unique strengths of both the local and remote talent markets, balancing cost-effectiveness with access to elite, niche talent.</p>
+
+            <div class="flex flex-col md:flex-row items-start justify-center gap-8 md:gap-0">
+                <div class="w-full md:w-5/12">
+                    <div class="flowchart-step p-6 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-[#ff764a]">TIER 1: DEFAULT LOCAL</div>
+                        <p class="mt-2 font-semibold">For Core Python/React Roles</p>
+                        <p class="text-sm mt-2">Aggressively source within Utah to capitalize on talent density, SaaS experience, and significant cost savings.</p>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-2/12 flex justify-center items-center">
+                   <div class="hidden md:block">
+                        <div class="flowchart-arrow text-5xl font-light">&harr;</div>
+                   </div>
+                   <div class="md:hidden">
+                        <div class="flowchart-arrow text-5xl font-light">&darr;</div>
+                   </div>
+                </div>
+
+                <div class="w-full md:w-5/12">
+                    <div class="flowchart-step p-6 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-[#ffa600]">TIER 2: TARGETED REMOTE</div>
+                        <p class="mt-2 font-semibold">For Niche Elixir/AI/ML Roles</p>
+                        <p class="text-sm mt-2">Run dedicated national searches to access the deepest possible talent pool for strategic, high-impact positions.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#003f5c] text-white text-center py-8 mt-20">
+        <p>Podium Strategic Talent Analysis | 2025</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const CHART_COLORS = {
+                navy: '#003f5c',
+                slate: '#374c80',
+                purple: '#7a5195',
+                magenta: '#bc5090',
+                coral: '#ef5675',
+                orange: '#ff764a',
+                gold: '#ffa600',
+            };
+
+            const globalTooltipOptions = {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        const item = tooltipItems[0];
+                        let label = item.chart.data.labels[item.dataIndex];
+                        if (Array.isArray(label)) {
+                            return label.join(' ');
+                        }
+                        return label;
+                    }
+                }
+            };
+            
+            const wrapLabel = (label, maxWidth) => {
+                const words = label.split(' ');
+                let lines = [];
+                let currentLine = words[0];
+
+                for (let i = 1; i < words.length; i++) {
+                    if ((currentLine + ' ' + words[i]).length > maxWidth) {
+                        lines.push(currentLine);
+                        currentLine = words[i];
+                    } else {
+                        currentLine += ' ' + words[i];
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            };
+
+            const processLabels = (labels) => labels.map(label => {
+                if (label.length > 16) {
+                    return wrapLabel(label, 16);
+                }
+                return label;
+            });
+
+            new Chart(document.getElementById('talentConcentrationChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Salt Lake MSA', 'Provo-Orem MSA', 'Rest of Utah'],
+                    datasets: [{
+                        label: 'Tech Job Concentration',
+                        data: [52, 33, 15],
+                        backgroundColor: [CHART_COLORS.slate, CHART_COLORS.magenta, CHART_COLORS.gold],
+                        borderColor: '#ffffff',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: globalTooltipOptions
+                    }
+                }
+            });
+            
+            new Chart(document.getElementById('techStackAlignmentChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Python', 'React/TS', 'Elixir (Community)'],
+                    datasets: [{
+                        label: 'Local Strength (Qualitative)',
+                        data: [92, 85, 60],
+                        backgroundColor: [CHART_COLORS.purple, CHART_COLORS.coral, CHART_COLORS.orange],
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                         x: { display: false },
+                         y: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: globalTooltipOptions
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('seniorityBiasChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['Senior-Level Remote', 'Mid-Level Remote', 'Entry-Level Remote'],
+                    datasets: [{
+                        label: '% of Jobs Offered Remotely',
+                        data: [5.35, 4.9, 2.48],
+                        backgroundColor: [CHART_COLORS.coral, CHART_COLORS.gold, CHART_COLORS.slate],
+                         borderColor: '#ffffff',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: globalTooltipOptions
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('nicheTalentChart'), {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Utah',
+                        data: [{x: 20, y: 30, r: 15}],
+                        backgroundColor: CHART_COLORS.magenta,
+                        borderColor: 'transparent',
+                    }, {
+                        label: 'U.S. Remote',
+                        data: [{x: 60, y: 70, r: 40}],
+                        backgroundColor: CHART_COLORS.orange,
+                        borderColor: 'transparent'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            display: false,
+                            min: 0,
+                            max: 100
+                        },
+                        y: {
+                            display: false,
+                            min: 0,
+                            max: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += 'Relative Talent Depth for Elixir/AI/ML';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const salaryLabels = ['Utah (Avg)', 'Denver', 'Atlanta', 'Austin', 'Remote (Avg)', 'New York'];
+            new Chart(document.getElementById('salaryBenchmarkChart'), {
+                type: 'bar',
+                data: {
+                    labels: processLabels(salaryLabels),
+                    datasets: [{
+                        label: 'Average Base Salary ($K)',
+                        data: [139, 147, 141, 145, 177, 163],
+                        backgroundColor: [
+                            CHART_COLORS.gold,
+                            CHART_COLORS.slate,
+                            CHART_COLORS.purple,
+                            CHART_COLORS.magenta,
+                            CHART_COLORS.orange,
+                            CHART_COLORS.coral
+                        ],
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value + 'k';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: globalTooltipOptions
+                    }
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>
