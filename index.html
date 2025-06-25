@@ -59,6 +59,26 @@
         .flowchart-arrow {
             color: #7a5195;
         }
+        .funnel-kpi-value {
+            font-size: 2.25rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .scorecard-icon {
+            font-size: 1.5rem;
+        }
+        .productivity-card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .productivity-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            line-height: 1;
+        }
     </style>
 </head>
 <body class="text-[#003f5c]">
@@ -104,22 +124,6 @@
                         <canvas id="techStackAlignmentChart"></canvas>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-2">
-                    <h3 class="text-xl font-bold mb-2 text-center">Local Hiring Competition</h3>
-                    <p class="text-center text-sm text-gray-500 mb-6">Competition is fierce but predictable, focused on a known set of "Silicon Slopes" leaders.</p>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 text-center">
-                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Adobe</div>
-                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Qualtrics</div>
-                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Microsoft</div>
-                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Domo</div>
-                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Instructure</div>
-                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">MX</div>
-                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Ancestry</div>
-                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Pluralsight</div>
-                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Ivanti</div>
-                        <div class="p-4 bg-gray-100 rounded-lg font-semibold">Venafi</div>
-                    </div>
-                </div>
             </div>
         </section>
 
@@ -142,80 +146,182 @@
                         <canvas id="nicheTalentChart"></canvas>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-2">
-                    <h3 class="text-xl font-bold mb-2 text-center">Remote Market Dynamics</h3>
-                    <p class="text-center text-sm text-gray-500 mb-6">Two major forces are currently shaping remote candidate availability, creating unique sourcing opportunities.</p>
-                    <div class="flex flex-col md:flex-row justify-around gap-8">
-                        <div class="text-center flex-1">
-                            <div class="text-6xl mb-2">📈</div>
-                            <h4 class="text-lg font-bold">Increased Supply from Layoffs</h4>
-                            <p class="text-gray-600">Widespread tech layoffs have released high-quality, experienced engineers into the job market.</p>
+            </div>
+        </section>
+
+        <section id="hiring-funnel" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4">Head-to-Head: Funnel & Success Rates</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-600">Local hiring is faster and more efficient per candidate, while remote hiring requires more volume to overcome intense competition and achieve a hire.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white rounded-lg shadow-md p-8">
+                    <h3 class="text-2xl font-bold text-center mb-6 text-[#7a5195]">Utah-Local Sourcing</h3>
+                    <div class="grid grid-cols-2 gap-6 mb-8 text-center">
+                        <div>
+                            <div class="funnel-kpi-value text-[#7a5195]">~45 Days</div>
+                            <div class="text-sm font-medium text-gray-600">Time to Fill</div>
                         </div>
-                        <div class="text-center flex-1">
-                            <div class="text-6xl mb-2">🏃💨</div>
-                            <h4 class="text-lg font-bold">"Forced Churn" from RTO</h4>
-                            <p class="text-gray-600">Engineers leaving companies due to strict Return-To-Office mandates create a pool of proven, remote-ready talent.</p>
+                        <div>
+                            <div class="funnel-kpi-value text-[#7a5195]">~85%</div>
+                            <div class="text-sm font-medium text-gray-600">Offer Acceptance</div>
                         </div>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mb-4">Fewer applicants are needed to find a quality hire due to stronger alignment and less offer competition.</p>
+                    <div class="chart-container" style="height: 250px;">
+                        <canvas id="localFunnelChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-8">
+                    <h3 class="text-2xl font-bold text-center mb-6 text-[#ff764a]">U.S. Remote Sourcing</h3>
+                    <div class="grid grid-cols-2 gap-6 mb-8 text-center">
+                        <div>
+                            <div class="funnel-kpi-value text-[#ff764a]">~70 Days</div>
+                            <div class="text-sm font-medium text-gray-600">Time to Fill</div>
+                        </div>
+                        <div>
+                            <div class="funnel-kpi-value text-[#ff764a]">~60%</div>
+                            <div class="text-sm font-medium text-gray-600">Offer Acceptance</div>
+                        </div>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mb-4">A massive top-of-funnel is necessary to overcome intense competition and lower conversion rates.</p>
+                    <div class="chart-container" style="height: 250px;">
+                        <canvas id="remoteFunnelChart"></canvas>
                     </div>
                 </div>
             </div>
         </section>
-
-        <section id="head-to-head" class="mb-20">
-            <h2 class="text-3xl font-bold text-center mb-4">Head-to-Head Comparison</h2>
-            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-600">The most critical decision factor comes down to a trade-off between cost and access to talent. Utah offers significant savings, while remote provides access to a higher ceiling of expertise.</p>
-
+        
+        <section id="candidate-availability" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4">Head-to-Head: Candidate Availability</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-600">Comparing the dynamics of each talent pool reveals where sourcing efforts are likely to be most effective. Utah offers a highly responsive but smaller pool, while remote provides a massive supply tempered by fierce competition.</p>
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-xl font-bold mb-2 text-center">Senior Engineer Salary Benchmarks (Average Base)</h3>
-                <p class="text-center text-sm text-gray-500 mb-4">Utah's compensation is competitive locally but offers a clear cost advantage over major remote hubs and the national remote average.</p>
                 <div class="chart-container h-96 md:h-[500px]">
-                    <canvas id="salaryBenchmarkChart"></canvas>
+                    <canvas id="availabilityRadarChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="total-cost" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4">Head-to-Head: Total Cost of Hire</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-600">A complete financial picture shows that while remote salaries are higher, the total first-year cost difference is compounded by increased recruiting and onboarding expenses.</p>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-bold mb-2 text-center">Estimated First-Year Cost per Senior Engineer</h3>
+                <div class="chart-container h-80 md:h-96">
+                    <canvas id="totalCostChart"></canvas>
                 </div>
             </div>
         </section>
         
-        <section id="pipeline" class="mb-20">
-             <h2 class="text-3xl font-bold text-center mb-4">The Utah Talent Pipeline</h2>
-             <p class="text-center max-w-3xl mx-auto mb-12 text-gray-600">Utah's tech ecosystem is consistently replenished by a strong network of universities and alternative training programs, creating a sustainable talent pipeline.</p>
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-xl font-bold mb-2 text-center">Top Utah Universities by Annual CS Graduates</h3>
-                 <p class="text-center text-sm text-gray-500 mb-6">A mix of traditional and online institutions produce a high volume of tech graduates each year, fueling the local industry.</p>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="bg-gray-50 border-b-2 border-gray-200">
-                            <tr>
-                                <th class="p-3 text-sm font-semibold tracking-wide">Institution</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide">Key Strengths</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-right">Annual Grads</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            <tr class="bg-white">
-                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap font-bold text-[#ef5675]">Western Governors University</td>
-                                <td class="p-3 text-sm text-gray-700">Online, competency-based, high volume</td>
-                                <td class="p-3 text-sm text-gray-700 font-bold text-right">1,317</td>
-                            </tr>
-                             <tr class="bg-gray-50">
-                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap font-bold text-[#bc5090]">Utah Valley University</td>
-                                <td class="p-3 text-sm text-gray-700">Hands-on, applied learning, ABET-accredited</td>
-                                <td class="p-3 text-sm text-gray-700 font-bold text-right">1,249</td>
-                            </tr>
-                            <tr class="bg-white">
-                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap font-bold text-[#7a5195]">University of Utah</td>
-                                <td class="p-3 text-sm text-gray-700">Historic CS program, strong research, elite placements</td>
-                                <td class="p-3 text-sm text-gray-700 font-bold text-right">399</td>
-                            </tr>
-                             <tr class="bg-gray-50">
-                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap font-bold text-[#374c80]">Brigham Young University</td>
-                                <td class="p-3 text-sm text-gray-700">Robust programs, heavily recruited by top tech</td>
-                                <td class="p-3 text-sm text-gray-700 font-bold text-right">N/A</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <section id="culture-scorecard" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4">Head-to-Head: Culture & Onboarding</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-600">Evaluating long-term success factors highlights the cultural and collaborative benefits of local hires versus the flexibility offered by a remote workforce.</p>
+            <div class="bg-white rounded-lg shadow-md p-6 overflow-x-auto">
+                 <table class="w-full min-w-[600px]">
+                    <thead class="bg-gray-50 border-b-2 border-gray-200">
+                        <tr>
+                            <th class="p-3 text-sm font-semibold tracking-wide text-left">Factor</th>
+                            <th class="p-3 text-sm font-semibold tracking-wide text-center">Utah-Local Hire</th>
+                            <th class="p-3 text-sm font-semibold tracking-wide text-center">U.S. Remote Hire</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr class="bg-white">
+                            <td class="p-4 font-bold">Office Engagement</td>
+                            <td class="p-4 text-center">
+                                <span class="scorecard-icon text-green-500">★★★★★</span>
+                                <p class="text-xs text-gray-500">High likelihood of attending in-person events, fostering strong team bonds.</p>
+                            </td>
+                            <td class="p-4 text-center">
+                                <span class="scorecard-icon text-yellow-500">★★☆☆☆</span>
+                                <p class="text-xs text-gray-500">Engagement depends on travel budget and willingness; collaboration is primarily digital.</p>
+                            </td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="p-4 font-bold">Timezone Alignment</td>
+                            <td class="p-4 text-center">
+                                <span class="scorecard-icon text-green-500">★★★★★</span>
+                                <p class="text-xs text-gray-500">Seamless collaboration with zero time-zone friction for the Lehi-based team.</p>
+                            </td>
+                            <td class="p-4 text-center">
+                                <span class="scorecard-icon text-yellow-500">★★★☆☆</span>
+                                <p class="text-xs text-gray-500">Manageable with East/West coast hires, but can create asynchronous workflow challenges.</p>
+                            </td>
+                        </tr>
+                        <tr class="bg-white">
+                             <td class="p-4 font-bold">Est. Team Cohesion (Proxy)</td>
+                            <td class="p-4 text-center">
+                                <span class="scorecard-icon text-green-500">★★★★☆</span>
+                                <p class="text-xs text-gray-500">Shared local context and informal interactions can accelerate team integration.</p>
+                            </td>
+                            <td class="p-4 text-center">
+                                <span class="scorecard-icon text-blue-500">★★★☆☆</span>
+                                <p class="text-xs text-gray-500">Requires deliberate, structured effort to build cohesion across distances.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                 </table>
+            </div>
+        </section>
+
+        <section id="productivity" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4">Onboarding & Time-to-Productivity</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-600">How quickly a new hire starts delivering value is a key ROI metric. Local hires benefit from informal, in-person support, while remote hires depend on highly structured digital onboarding.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="productivity-card">
+                    <h3 class="text-xl font-bold text-[#7a5195] mb-3">Local Hire</h3>
+                    <div class="productivity-value text-[#7a5195]">~30 Days</div>
+                    <p class="font-medium mt-2 mb-3">Time to First Major Contribution</p>
+                    <p class="text-gray-600 text-sm">Onboarding is accelerated by "learning by osmosis," informal Q&A, and spontaneous whiteboarding sessions with teammates in the Lehi office.</p>
+                </div>
+                <div class="productivity-card">
+                    <h3 class="text-xl font-bold text-[#ff764a] mb-3">Remote Hire</h3>
+                    <div class="productivity-value text-[#ff764a]">~45 Days</div>
+                     <p class="font-medium mt-2 mb-3">Time to First Major Contribution</p>
+                    <p class="text-gray-600 text-sm">Productivity is entirely dependent on the quality of documentation and a deliberate, structured onboarding plan with scheduled check-ins and mentorship.</p>
                 </div>
             </div>
         </section>
 
+        <section id="long-term-risks" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4">Long-Term Strategic Risks</h2>
+             <p class="text-center max-w-3xl mx-auto mb-12 text-gray-600">Looking beyond the initial hire, a hybrid location strategy introduces complex risks to retention and compensation that require proactive management.</p>
+             <div class="bg-white rounded-lg shadow-md p-6 overflow-x-auto">
+                 <table class="w-full min-w-[600px]">
+                    <thead class="bg-gray-50 border-b-2 border-gray-200">
+                        <tr>
+                            <th class="p-3 text-sm font-semibold tracking-wide text-left">Risk Factor</th>
+                            <th class="p-3 text-sm font-semibold tracking-wide text-center">Utah-Local Hire Impact</th>
+                            <th class="p-3 text-sm font-semibold tracking-wide text-center">U.S. Remote Hire Impact</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr class="bg-white">
+                            <td class="p-4 font-bold">Attrition Risk (Poaching)</td>
+                            <td class="p-4 text-center">
+                                <span class="scorecard-icon text-yellow-500">Medium</span>
+                                <p class="text-xs text-gray-500">Tied to the local community, but competes with a known set of local tech companies.</p>
+                            </td>
+                            <td class="p-4 text-center">
+                                <span class="scorecard-icon text-red-500">High</span>
+                                <p class="text-xs text-gray-500">Exposed to a global market of remote opportunities; recruiters can target them from anywhere.</p>
+                            </td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="p-4 font-bold">Compensation Compression</td>
+                            <td class="p-4 text-center">
+                                <span class="scorecard-icon text-green-500">Low</span>
+                                <p class="text-xs text-gray-500">Salaries are benchmarked against a consistent, well-understood local market.</p>
+                            </td>
+                            <td class="p-4 text-center">
+                                <span class="scorecard-icon text-red-500">High</span>
+                                <p class="text-xs text-gray-500">Hiring at national rates can create significant pay equity challenges with tenured local employees.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                 </table>
+             </div>
+        </section>
 
         <section id="recommendations">
             <h2 class="text-3xl font-bold text-center mb-4">Podium's Path Forward: A Bifurcated Sourcing Strategy</h2>
@@ -281,30 +387,6 @@
                 }
             };
             
-            const wrapLabel = (label, maxWidth) => {
-                const words = label.split(' ');
-                let lines = [];
-                let currentLine = words[0];
-
-                for (let i = 1; i < words.length; i++) {
-                    if ((currentLine + ' ' + words[i]).length > maxWidth) {
-                        lines.push(currentLine);
-                        currentLine = words[i];
-                    } else {
-                        currentLine += ' ' + words[i];
-                    }
-                }
-                lines.push(currentLine);
-                return lines;
-            };
-
-            const processLabels = (labels) => labels.map(label => {
-                if (label.length > 16) {
-                    return wrapLabel(label, 16);
-                }
-                return label;
-            });
-
             new Chart(document.getElementById('talentConcentrationChart'), {
                 type: 'doughnut',
                 data: {
@@ -394,28 +476,15 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: {
-                            display: false,
-                            min: 0,
-                            max: 100
-                        },
-                        y: {
-                            display: false,
-                            min: 0,
-                            max: 100
-                        }
+                        x: { display: false, min: 0, max: 100 },
+                        y: { display: false, min: 0, max: 100 }
                     },
                     plugins: {
                         legend: { position: 'top' },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    label += 'Relative Talent Depth for Elixir/AI/ML';
-                                    return label;
+                                    return `${context.dataset.label}: Relative Talent Depth for Elixir/AI/ML`;
                                 }
                             }
                         }
@@ -423,41 +492,116 @@
                 }
             });
 
-            const salaryLabels = ['Utah (Avg)', 'Denver', 'Atlanta', 'Austin', 'Remote (Avg)', 'New York'];
-            new Chart(document.getElementById('salaryBenchmarkChart'), {
+            const funnelOptions = {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { display: false, stacked: true },
+                    y: { display: false, stacked: true }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: { label: (c) => `${c.label}: ${c.raw}` }
+                    }
+                }
+            };
+
+            new Chart(document.getElementById('localFunnelChart'), {
                 type: 'bar',
                 data: {
-                    labels: processLabels(salaryLabels),
-                    datasets: [{
-                        label: 'Average Base Salary ($K)',
-                        data: [139, 147, 141, 145, 177, 163],
-                        backgroundColor: [
-                            CHART_COLORS.gold,
-                            CHART_COLORS.slate,
-                            CHART_COLORS.purple,
-                            CHART_COLORS.magenta,
-                            CHART_COLORS.orange,
-                            CHART_COLORS.coral
-                        ],
-                        borderRadius: 4,
-                    }]
+                    labels: ['Applicants', 'Screened', 'Interview', 'Offer', 'Hire'],
+                    datasets: [{ data: [120, 40, 10, 2, 1], backgroundColor: CHART_COLORS.purple, borderRadius: 4 }]
+                },
+                options: funnelOptions
+            });
+
+            new Chart(document.getElementById('remoteFunnelChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Applicants', 'Screened', 'Interview', 'Offer', 'Hire'],
+                    datasets: [{ data: [400, 80, 15, 3, 1], backgroundColor: CHART_COLORS.orange, borderRadius: 4 }]
+                },
+                options: funnelOptions
+            });
+
+            new Chart(document.getElementById('availabilityRadarChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Outreach Response Rate', 'Passive Candidate Pool', 'Layoff Supply (Recent)', 'Hiring Competition'],
+                    datasets: [
+                        {
+                            label: 'Utah-Local',
+                            data: [8, 6, 7, 6],
+                            borderColor: CHART_COLORS.purple,
+                            backgroundColor: 'rgba(122, 81, 149, 0.2)',
+                            pointBackgroundColor: CHART_COLORS.purple,
+                        },
+                        {
+                            label: 'U.S. Remote',
+                            data: [4, 9, 9, 9],
+                            borderColor: CHART_COLORS.orange,
+                            backgroundColor: 'rgba(255, 118, 74, 0.2)',
+                            pointBackgroundColor: CHART_COLORS.orange,
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: {
-                            beginAtZero: true,
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: { font: { size: 14 } },
                             ticks: {
-                                callback: function(value) {
-                                    return '$' + value + 'k';
-                                }
-                            }
+                                backdropColor: 'transparent',
+                                stepSize: 2
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 10
+                        }
+                    },
+                    plugins: { legend: { position: 'top' } }
+                }
+            });
+            
+            new Chart(document.getElementById('totalCostChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Utah-Local Hire', 'U.S. Remote Hire'],
+                    datasets: [
+                        {
+                            label: 'Base Salary',
+                            data: [139, 177],
+                            backgroundColor: CHART_COLORS.slate,
+                        },
+                         {
+                            label: 'Recruiting Costs',
+                            data: [5, 15],
+                            backgroundColor: CHART_COLORS.magenta,
+                        },
+                        {
+                            label: 'Onboarding & Equipment',
+                            data: [2, 4],
+                            backgroundColor: CHART_COLORS.gold,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { stacked: true, grid: { display: false } },
+                        y: { 
+                           stacked: true,
+                           ticks: { callback: (value) => '$' + value + 'k' } 
                         }
                     },
                     plugins: {
-                        legend: { display: false },
-                        tooltip: globalTooltipOptions
+                        legend: { position: 'top' },
+                        tooltip: { callbacks: { label: (c) => `${c.dataset.label}: $${c.raw}k` } }
                     }
                 }
             });
